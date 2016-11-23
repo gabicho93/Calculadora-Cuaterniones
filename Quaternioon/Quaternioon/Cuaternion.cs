@@ -142,7 +142,88 @@ namespace Motor_fisica2
 
         #endregion
 
+
+
         #region metodos_staticos
+
+
+        public static Cuaternion op_multiplicarescalar(float lambda, Cuaternion Q)
+        {
+            return new Cuaternion(lambda * Q.a, lambda * Q.x, lambda * Q.y, lambda * Q.z);
+
+        }
+
+        public static Cuaternion suma(Cuaternion Q1, Cuaternion Q2)
+        {
+            return new Cuaternion(Q1.a + Q2.a, Q1.x + Q2.x, Q1.y + Q2.y, Q1.z + Q2.z);
+        }
+
+        public static Cuaternion resta(Cuaternion Q1, Cuaternion Q2)
+        {
+            return suma(Q1, op_multiplicarescalar(-1, Q2));
+        }
+
+        public static Cuaternion producto_quater(Cuaternion Q1, Cuaternion Q2)
+        {
+            return new Cuaternion(
+                Q1.A * Q2.A - (Q1.X * Q2.X + Q1.Y * Q2.Y + Q1.Z * Q2.Z),
+                Q1.A * Q2.X + Q2.A * Q1.X + Q1.Y * Q2.Z - Q1.Z * Q2.Y,
+                Q2.A * Q1.Y + Q1.A * Q2.Y + Q1.Z * Q2.X - Q1.X * Q2.Z,
+                Q2.A * Q1.Z + Q1.A * Q2.Z - Q1.Y * Q2.X + Q1.X * Q2.Y);
+        }
+
+        public static float producto_escalar(Cuaternion Q1, Cuaternion Q2)
+        {
+            return (Q1.A * Q2.A + Q1.X * Q2.X + Q1.Y * Q2.Y + Q1.Z * Q2.Z);
+
+        }
+
+
+        public static Cuaternion normalizar(Cuaternion Q)
+        {
+            float d = Q.modulo();
+            if (d > 0)
+            {
+                Q.a = Q.A / d;
+                Q.x = Q.X / d;
+                Q.y = Q.Y / d;
+                Q.z = Q.Z / d;
+            }
+            return new Cuaternion(Q);
+        }
+
+        public static Cuaternion conjugado(Cuaternion Q)
+        {
+            return new Cuaternion(Q.A, -1 * Q.X, -1 * Q.Y, -1 * Q.Z);
+        }
+
+        public static Cuaternion transf_rotar(float angulo, Cuaternion q)
+        {
+            return new Cuaternion(Convert.ToSingle(Math.Cos((angulo / 2) * (Math.PI / 180))),
+                Convert.ToSingle(Math.Sin((angulo / 2) * (Math.PI / 180))) * q.x,
+                Convert.ToSingle(Math.Sin((angulo / 2) * (Math.PI / 180))) * q.y,
+                Convert.ToSingle(Math.Sin((angulo / 2) * (Math.PI / 180))) * q.z);
+        }
+
+        public static Cuaternion quater_inverso(Cuaternion Q)
+        {
+            float d = Q.modulo();
+            if (d > 0)
+            {
+                Q.a = Q.A;
+                Q.x = (-1) * Q.X;
+                Q.y = (-1) * Q.Y;
+                Q.z = (-1) * Q.Z;
+            }
+
+
+            return new Cuaternion(Convert.ToSingle(Q.A / (Math.Pow(d, 2))),
+                Convert.ToSingle(Q.x / (Math.Pow(d, 2))),
+                Convert.ToSingle(Q.y / (Math.Pow(d, 2))),
+                Convert.ToSingle(Q.z / (Math.Pow(d, 2))));
+
+        }
+
 
         #endregion
 
